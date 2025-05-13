@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daftar Antrian Pasien</title>
+    <link rel="stylesheet" href="../css/daftar-pasien.css">
+</head>
+<body>
+    <header>
+        <div class="logo">AntriKu</div>
+        <nav>
+            <ul>
+                <li><a href="index.html">Beranda</a></li>
+                <li><a href="form-pasien.html">Form Pasien</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <section class="antrian-list">
+            <h2>Daftar Pasien dalam Antrian</h2>
+            <ul id="antrianList"></ul>
+            <div class="button-container">
+                <button onclick="keluarPasien()">Pasien Keluar</button>
+                <button onclick="clearAntrian()">Hapus Semua Pasien</button>
+            </div>
+        </section>
+    </main>
+    <footer>
+        <p class="copyright">© 2025 AntriKu. Semua hak dilindungi.</p>
+    </footer>
+    <script src="../js/script.js"></script>
+</body>
+</html>

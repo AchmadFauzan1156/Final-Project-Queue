@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Form Pasien</title>
+    <link rel="stylesheet" href="../css/form-pasien.css" />
+</head>
+<body>
+    <header>
+        <div class="logo">AntriKu</div>
+        <nav>
+            <ul>
+                <li><a href="index.html">Beranda</a></li>
+                <li><a href="daftar-pasien.html">Daftar Pasien</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="form-container">
+            <h2>Daftar Pasien Baru</h2>
+            <form id="form-pasien" class="card">
+                <label for="nama">Nama Pasien:</label>
+                <input type="text" id="nama" name="nama" placeholder="Masukkan nama pasien" required />
+
+                <label for="idPasien">ID Pasien:</label>
+                <input type="text" id="idPasien" name="idPasien" placeholder="Masukkan ID pasien" required />
+
+                <button type="submit" class="btn-primary">Daftarkan Pasien</button>
+            </form>
+        </section>
+    </main>
+
+    <footer>
+        <p class="copyright">© 2025 AntriKu. Semua hak dilindungi.</p>
+    </footer>
+
+    <script src="../js/script.js"></script>
+</body>
+</html>

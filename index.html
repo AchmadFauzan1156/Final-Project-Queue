@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manajemen Antrian Pasien</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <header>
+        <div class="logo">AntriKu</div>
+        <nav>
+            <ul>
+                <li><a href="form-pasien.html">Form Pasien</a></li>
+                <li><a href="daftar-pasien.html">Daftar Pasien</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <main>
+        <section class="intro">
+            <h1>Selamat datang di AntriKu</h1>
+            <p>Kelola antrian pasien dengan mudah dan efisien.</p>
+            <a href="form-pasien.html" class="btn">Daftar Pasien</a>
+        </section>
+        
+        <!-- Tombol baru untuk cek ruang tersedia, cari pasien, dan lainnya -->
+        <div class="action-buttons">
+            <button class="action-btn" onclick="showPopup('cekRuang')">Cek Ruang Tersedia</button>
+            <button class="action-btn" onclick="showPopup('cariPasien')">Cari Pasien Berdasarkan ID</button>
+            <button class="action-btn" onclick="showPopup('pasienTerlama')">Pasien Terlama dalam Antrian</button>
+            <button class="action-btn" onclick="showPopup('estimasiWaktu')">Estimasi Waktu Tunggu Pasien</button>
+        </div>
+
+        <!-- Daftar Pasien -->
+        <section id="antrianSection">
+            <h2>Daftar Pasien</h2>
+            <ul id="antrianList">
+                <!-- Daftar Pasien akan muncul di sini -->
+            </ul>
+        </section>
+    </main>
+    
+    <footer>
+        <p class="copyright">© 2025 AntriKu. Semua hak dilindungi.</p>
+    </footer>
+    
+    <!-- Pop-up Info -->
+    <div id="popup" class="popup">
+        <div class="popup-content">
+            <span class="close-btn" onclick="closePopup()">&times;</span>
+            <h3 id="popup-title">Info</h3>
+            <p id="popup-message">Informasi akan muncul di sini...</p>
+        </div>
+    </div>
+
+    <script>
+        // Kode JavaScript yang sudah disediakan sebelumnya
+        function showPopup(type) {
+            const popup = document.getElementById('popup');
+            const title = document.getElementById('popup-title');
+            const message = document.getElementById('popup-message');
+
+            // Set title and message based on the action clicked
+            if (type === 'cekRuang') {
+                const kapasitas = 4; // Total capacity of rooms
+                const antrian = getAntrian();
+                title.textContent = 'Cek Ruang Tersedia';
+                message.textContent = `Ruang yang tersedia saat ini: ${kapasitas - antrian.length}`;
+            } else if (type === 'cariPasien') {
+                title.textContent = 'Cari Pasien Berdasarkan ID';
+                message.innerHTML = `
+                    <label for="searchId">Masukkan ID Pasien:</label>
+                    <input type="text" id="searchId" placeholder="ID Pasien" />
+                    <button onclick="cariPasien()">Cari</button>
+                    <div id="cariHasil"></div>
+                `;
+            } else if (type === 'pasienTerlama') {
+                const antrian = getAntrian();
+                title.textContent = 'Pasien Terlama dalam Antrian';
+                if (antrian.length > 0) {
+                    const pasienTerlama = antrian[0]; // Pasien pertama masuk adalah yang terlama
+                    message.innerHTML = `<p>Pasien pertama yang masuk: ${pasienTerlama.nama} (ID: ${pasienTerlama.id}), Masuk: ${pasienTerlama.waktuMasuk}</p>`;
+                } else {
+                    message.innerHTML = `<p>Belum ada pasien dalam antrian.</p>`;
+                }
+            } else if (type === 'estimasiWaktu') {
+                const antrian = getAntrian();
+                const waktuTunggu = antrian.length * 10; // Estimasi waktu tunggu: 10 menit per pasien
+                title.textContent = 'Estimasi Waktu Tunggu Pasien';
+                message.innerHTML = `<p>Estimasi waktu tunggu: ${waktuTunggu} menit</p>`;
+            }
+
+            // Show the popup
+            popup.style.display = 'flex';
+        }
+
+        // Close the popup
+        function closePopup() {
+            const popup = document.getElementById('popup');
+            popup.style.display = 'none';
+        }
+
+        // Cari pasien berdasarkan ID
+        function cariPasien() {
+            const searchId = document.getElementById('searchId').value.trim();
+            const hasilDiv = document.getElementById('cariHasil');
+            
+            if (!searchId) {
+                hasilDiv.textContent = "Harap masukkan ID pasien untuk pencarian.";
+                return;
+            }
+
+            let antrian = getAntrian();
+            let pasien = antrian.find(p => p.id === searchId);
+
+            if (pasien) {
+                hasilDiv.innerHTML = `
+                    <p>Pasien ditemukan: ${pasien.nama}, ID: ${pasien.id}, Waktu Masuk: ${pasien.waktuMasuk}</p>
+                `;
+            } else {
+                hasilDiv.textContent = "Pasien dengan ID tersebut tidak ditemukan.";
+            }
+        }
+
+        // Helper functions to manage the queue (same as in previous example)
+        function getAntrian() {
+            return JSON.parse(localStorage.getItem('antrian')) || [];
+        }
+
+        function saveAntrian(data) {
+            localStorage.setItem('antrian', JSON.stringify(data));
+        }
+        
+        // Function to update the list of patients (display in the antrian list section)
+        function lihatAntrian() {
+            const listContainer = document.getElementById('antrianList');
+            let antrian = getAntrian();
+            listContainer.innerHTML = "";
+
+            if (antrian.length === 0) {
+                listContainer.innerHTML = "<li>Antrian kosong.</li>";
+                return;
+            }
+
+            antrian.forEach((pasien, index) => {
+                let li = document.createElement('li');
+                li.textContent = `#${index + 1}: ${pasien.nama} (ID: ${pasien.id}) - Masuk: ${pasien.waktuMasuk}`;
+                listContainer.appendChild(li);
+            });
+        }
+
+        // Call this function to see the queue on load
+        window.onload = function() {
+            lihatAntrian(); // Display the list of patients on page load
+        }
+    </script>
+</body>
+</html>
